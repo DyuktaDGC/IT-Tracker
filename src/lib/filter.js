@@ -50,7 +50,7 @@ const matchesQuery = (project, query) => {
     project.employee,
     project.stage,
     project.status,
-    ...(project.items ?? []).flatMap((item) => [item.item, item.type, item.remarks]),
+    ...(project.items ?? []).flatMap((item) => [item.item, item.remarks, item.futureScope]),
   ];
   return haystack.some((value) => typeof value === "string" && value.toLowerCase().includes(needle));
 };

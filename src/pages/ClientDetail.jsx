@@ -49,7 +49,7 @@ export default function ClientDetail() {
 
   const projects = data.projects.filter((project) => project.clientId === clientId);
   const items = projects.flatMap((project) => project.items);
-  const unrecorded = items.filter((item) => !item.dataStatus && !item.buildStatus && !item.finalStatus).length;
+  const unrecorded = items.filter((item) => !item.status).length;
 
   // Default to the first dashboard; fall back if a filter drops the selected one.
   const active = projects.find((project) => project.id === selected) ?? projects[0] ?? null;
@@ -74,8 +74,8 @@ export default function ClientDetail() {
 
       {client.completionPct === 0 && (
         <Note label="Why this reads 0%">
-          <b className="text-ink font-semibold">Nothing has cleared all three gates yet.</b> {unrecorded} of{" "}
-          {items.length} checklist rows have no status recorded in the sheet.
+          <b className="text-ink font-semibold">Nothing is marked completed yet.</b> {unrecorded} of {items.length}{" "}
+          checklist rows have no status recorded in the sheet.
         </Note>
       )}
 

@@ -1,6 +1,9 @@
 const KNOWN = {
   completed: { label: "Completed", tone: "good" },
   approved: { label: "Approved", tone: "good" },
+  "data approved": { label: "Data Approved", tone: "accent" },
+  "data pending": { label: "Data Pending", tone: "warn" },
+  "data needs correction": { label: "Data Needs Correction", tone: "warn" },
   "in progress": { label: "In Progress", tone: "accent" },
   "on hold": { label: "On Hold", tone: "warn" },
   pending: { label: "Pending", tone: "warn" },

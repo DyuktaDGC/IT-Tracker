@@ -9,8 +9,9 @@ const blank = (value) => {
   return !text || text === "none" || text === "not started";
 };
 
-// A row is "future scope" while none of its three gates has been recorded.
-const isFutureScope = (item) => blank(item.dataStatus) && blank(item.buildStatus) && blank(item.finalStatus);
+// A row is "future scope" when the sheet's Future scope column has a note, or
+// while its Status cell is still empty.
+const isFutureScope = (item) => Boolean(item.futureScope?.trim()) || blank(item.status);
 
 const HEADERS = ["Step No", "Task", "Status", "Start Date", "Delivery Date"];
 
@@ -48,9 +49,14 @@ function ChecklistCard({ title, hint, items, empty }) {
               {items.map((item, index) => (
                 <tr key={`${item.item}-${index}`} className="border-line-2 hover:bg-surface-2 border-t">
                   <td className="text-muted px-2 py-3 text-[13px] font-semibold tabular-nums">{index + 1}</td>
-                  <td className="px-2 py-3 font-semibold">{item.item}</td>
+                  <td className="px-2 py-3 font-semibold">
+                    {item.item}
+                    {item.futureScope?.trim() && (
+                      <span className="text-muted mt-0.5 block text-[12px] font-normal">{item.futureScope}</span>
+                    )}
+                  </td>
                   <td className="px-2 py-3">
-                    <StatusPill value={item.finalStatus} />
+                    <StatusPill value={item.status} />
                   </td>
                   <td className="px-2 py-3 whitespace-nowrap">
                     <DateValue value={item.startDate} />

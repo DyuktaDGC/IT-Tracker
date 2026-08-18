@@ -8,21 +8,18 @@ const isoDate = z
   .nullable();
 const count = z.number().int().nonnegative();
 const percent = z.number().min(0).max(100);
-const pair = z.tuple([count, count]);
 
 const mix = z.object({ completed: count, inProgress: count, onHold: count, notStarted: count });
 
+// Sheet layout: Client | Assigned To | Dashboard Name | Checklist |
+// Start Date | Delivery Date | Status | Remarks | Future scope
 const item = z.object({
   item: z.string(),
-  type: z.string(),
-  dataStatus: status,
-  buildStatus: status,
-  finalStatus: status,
+  status: status,
   startDate: isoDate,
   deliveryDate: isoDate,
-  complete: z.boolean(),
-  gatesPassed: z.number().int().min(0).max(3),
-  remarks: z.string().optional(),
+  remarks: z.string().nullable().optional(),
+  futureScope: z.string().nullable().optional(),
 });
 
 const project = z.object({
@@ -40,7 +37,6 @@ const project = z.object({
   itemsDone: count,
   itemsTotal: count,
   completionPct: percent,
-  gates: z.object({ data: pair, build: pair, signoff: pair }),
   items: z.array(item),
 });
 
