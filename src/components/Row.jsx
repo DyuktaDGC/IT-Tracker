@@ -1,11 +1,19 @@
 import { Link } from "react-router-dom";
 
-export default function Row({ to, className = "", children }) {
+const BASE =
+  "border-line-2 hover:bg-surface-2 group grid items-center gap-3 border-t px-4 py-4 first:border-t-0 sm:gap-5 sm:px-5";
+
+export default function Row({ to, onClick, className = "", children }) {
+  if (!to && onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`w-full text-left ${BASE} ${className}`}>
+        {children}
+      </button>
+    );
+  }
+
   return (
-    <Link
-      to={to}
-      className={`border-line-2 hover:bg-surface-2 group grid items-center gap-3 border-t px-4 py-4 first:border-t-0 sm:gap-5 sm:px-5 ${className}`}
-    >
+    <Link to={to} onClick={onClick} className={`${BASE} ${className}`}>
       {children}
     </Link>
   );
