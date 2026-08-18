@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-/* Sunset theme: #EA6113 → #F88F22 → #FBB931 → #FFE3B3 drives all the chrome.
-   Dark mode sits on warm near-blacks, light mode on a warm muted grey.
-   The four status colours stay a separate, validated set. No pinks. */
-
 @layer base {
   :root,
   [data-theme="dark"] {
@@ -44,8 +40,6 @@
 
     --grey-bg: #212125;
 
-    /* Status palette — validated as a 4-slot categorical set against the dark
-       surface (#151517): lightness band, chroma floor, CVD separation, contrast. */
     --chart-good: #12ad74;
     --chart-progress: #3d8ae8;
     --chart-hold: #cb8320;
@@ -111,8 +105,6 @@
     --idle-bg: #efe9fa;
 
     --grey-bg: #f0eff8;
-
-    /* Same four roles, stepped for the light surface and validated separately. */
     --chart-good: #0f9d68;
     --chart-progress: #2f6fe4;
     --chart-hold: #b87200;
@@ -156,7 +148,6 @@
 }
 
 @layer components {
-  /* Stat tile: flat tint, colored edge and a solid cap rule. */
   .tile {
     position: relative;
     overflow: hidden;
@@ -213,7 +204,6 @@
     color: var(--ink);
   }
 
-  /* Data marks use the darker step so they hold 3:1 on the light surface. */
   .bar-fill {
     background: var(--accent-mark);
   }
@@ -244,7 +234,6 @@
     animation: stage-pulse 1.6s cubic-bezier(0.3, 0, 0.5, 1) infinite;
   }
 
-  /* Second ring, half a cycle behind the first, so there is always one in flight. */
   .stage-pulse-2 {
     animation: stage-pulse 1.6s cubic-bezier(0.3, 0, 0.5, 1) infinite;
     animation-delay: 0.8s;
