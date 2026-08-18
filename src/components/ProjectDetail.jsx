@@ -26,7 +26,6 @@ const groupByType = (items) =>
 
 function ChecklistCard({ title, hint, items, empty }) {
   const groups = groupByType(items);
-  let counter = 0;
 
   return (
     <Card className="p-5">
@@ -43,13 +42,13 @@ function ChecklistCard({ title, hint, items, empty }) {
       ) : (
         groups.map((group, groupIndex) => (
           <div key={`${group.type}-${groupIndex}`}>
-            <div className="text-muted mt-4 mb-1 text-[11px] font-bold tracking-widest uppercase">
-              {group.type}
-              <span className="ml-2 tabular-nums">{group.items.length}</span>
+            <div className="text-accent-ink mt-4 mb-1 flex items-baseline gap-2 text-[11.5px] font-bold tracking-widest uppercase">
+              <span className="tabular-nums">{groupIndex + 1}.</span>
+              <span>{group.type}</span>
+              <span className="text-muted tabular-nums">{group.items.length}</span>
             </div>
             <ol className="grid">
               {group.items.map((item, index) => {
-                counter += 1;
                 const dates = [
                   hasDate(item.startDate) && ["Start", item.startDate],
                   hasDate(item.deliveryDate) && ["Delivery", item.deliveryDate],
@@ -60,8 +59,8 @@ function ChecklistCard({ title, hint, items, empty }) {
                     key={`${item.item}-${index}`}
                     className="border-line-2 hover:bg-surface-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t px-2 py-2.5 first:border-t-0"
                   >
-                    <span className="text-muted w-5 flex-none text-right text-[12.5px] font-semibold tabular-nums">
-                      {counter}.
+                    <span className="text-muted w-9 flex-none text-right text-[12.5px] font-semibold tabular-nums">
+                      {groupIndex + 1}.{index + 1}
                     </span>
                     <span className="min-w-0 flex-1 text-[14.5px] font-semibold">{item.item}</span>
                     <span className="flex flex-none flex-wrap items-center gap-1.5">
@@ -70,7 +69,7 @@ function ChecklistCard({ title, hint, items, empty }) {
                       <StatusPill value={item.finalStatus} />
                     </span>
                     {(dates.length > 0 || item.remarks) && (
-                      <span className="text-muted flex w-full flex-wrap gap-x-4 pl-8 text-[12px]">
+                      <span className="text-muted flex w-full flex-wrap gap-x-4 pl-12 text-[12px]">
                         {dates.map(([label, value]) => (
                           <span key={label}>
                             {label}: <DateValue value={value} />
