@@ -86,12 +86,12 @@ export default function Employee() {
             return (
               <Card key={employee.name} className="p-5">
                 <div className="mb-4 flex flex-wrap items-center gap-3.5">
-                  <span className="bg-accent-bg text-accent-ink grid size-10 flex-none place-items-center rounded-xl text-[13px] font-semibold tracking-wider">
+                  <span className="bg-accent-bg text-accent-ink grid size-10 flex-none place-items-center rounded-xl text-[14.5px] font-semibold tracking-wider">
                     {initials(employee.name)}
                   </span>
                   <div className="mr-auto">
-                    <div className="text-base font-semibold tracking-tight">{employee.name}</div>
-                    <div className="text-muted text-xs">
+                    <div className="text-lg font-semibold tracking-tight">{employee.name}</div>
+                    <div className="text-muted text-[13px]">
                       {plural(employee.clientCount, "client")} · {plural(employee.projectCount, "dashboard")}
                     </div>
                   </div>
@@ -101,7 +101,7 @@ export default function Employee() {
                     caption={`${employee.itemsDone}/${employee.itemsTotal}`}
                     className="size-20 flex-none"
                     thickness={12}
-                    figureClass="text-[15px]"
+                    figureClass="text-[17px]"
                   />
                 </div>
 
@@ -124,7 +124,7 @@ export default function Employee() {
 
                 {clients.length > 0 && (
                   <div className="border-line-2 mt-5 border-t pt-4">
-                    <div className="text-muted mb-2.5 text-[10.5px] font-bold tracking-widest uppercase">
+                    <div className="text-muted mb-2.5 text-[12px] font-bold tracking-widest uppercase">
                       Clients handled
                     </div>
                     <ul className="grid gap-1">
@@ -135,20 +135,20 @@ export default function Employee() {
                             className="hover:bg-surface-2 group grid gap-2 rounded-lg px-2 py-2 sm:grid-cols-[minmax(0,1fr)_minmax(140px,1fr)] sm:items-center"
                           >
                             <span className="min-w-0">
-                              <span className="block truncate text-[13.5px] font-medium group-hover:underline">
+                              <span className="block truncate text-[15px] font-medium group-hover:underline">
                                 {client.name}
                               </span>
-                              <span className="text-muted block truncate text-[11.5px]">
+                              <span className="text-muted block truncate text-[13px]">
                                 {plural(client.dashboardCount, "dashboard")} · {client.itemsDone}/
                                 {client.itemsTotal} items
                               </span>
                             </span>
                             <span className="block">
                               <span className="mb-1 flex items-baseline justify-between gap-2">
-                                <span className="text-[13px] font-semibold tracking-tight tabular-nums">
+                                <span className="text-[15px] font-semibold tracking-tight tabular-nums">
                                   {formatPercent(client.avgPct)}
                                 </span>
-                                <span className="text-muted text-[11px]">avg performance</span>
+                                <span className="text-muted text-[12.5px]">avg performance</span>
                               </span>
                               <ProgressBar
                                 value={client.avgPct}
