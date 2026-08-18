@@ -1,0 +1,332 @@
+@import "tailwindcss";
+
+/* Sunset theme: #EA6113 → #F88F22 → #FBB931 → #FFE3B3 drives all the chrome.
+   Dark mode sits on warm near-blacks, light mode on a warm muted grey.
+   The four status colours stay a separate, validated set. No pinks. */
+
+@layer base {
+  :root,
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    --plane: #0d0d0f;
+    --surface: #151517;
+    --surface-2: #1e1e21;
+    --ink: #ededf0;
+    --ink-2: #b0b0b9;
+    --muted: #84848f;
+    --line: #2a2a2f;
+    --line-2: #232327;
+    --track: #292930;
+
+    --accent: #f88f22;
+    --accent-mark: #fbb931;
+    --accent-on: #1a1006;
+    --accent-ink: #ffc978;
+    --accent-bg: #33200a;
+    --accent-2: #ea6113;
+
+    --good: #12ad74;
+    --good-ink: #4ade9c;
+    --good-bg: #0c2b20;
+
+    --warn: #cb8320;
+    --warn-ink: #f0a94a;
+    --warn-bg: #2f2210;
+
+    --info: #3d8ae8;
+    --info-ink: #8fc3f0;
+    --info-bg: #101f31;
+
+    --idle: #9573d6;
+    --idle-ink: #bda3e8;
+    --idle-bg: #201a2b;
+
+    --grey-bg: #212125;
+
+    /* Status palette — validated as a 4-slot categorical set against the dark
+       surface (#151517): lightness band, chroma floor, CVD separation, contrast. */
+    --chart-good: #12ad74;
+    --chart-progress: #3d8ae8;
+    --chart-hold: #cb8320;
+    --chart-none: #9573d6;
+
+    --tile-violet: #33240a;
+    --tile-violet-edge: #8a6418;
+    --tile-violet-bar: #fbb931;
+    --tile-blue: #10202f;
+    --tile-blue-edge: #2a5074;
+    --tile-blue-bar: #3d8ae8;
+    --tile-rose: #331808;
+    --tile-rose-edge: #8a3d10;
+    --tile-rose-bar: #ea6113;
+    --tile-mint: #0c2f24;
+    --tile-mint-edge: #17715a;
+    --tile-mint-bar: #12ad74;
+    --tile-slate: #221c2c;
+    --tile-slate-edge: #443c5c;
+    --tile-slate-bar: #9573d6;
+    --tile-neutral: #24242a;
+    --tile-neutral-edge: #45454f;
+    --tile-neutral-bar: #9a9aa6;
+
+    --ring-glow: 0 0 0 1px color-mix(in oklab, var(--accent) 45%, transparent),
+      0 8px 26px -12px color-mix(in oklab, var(--accent) 75%, transparent);
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+
+    --plane: #f1f1f7;
+    --surface: #ffffff;
+    --surface-2: #f6f5fc;
+    --ink: #181832;
+    --ink-2: #4a4a6b;
+    --muted: #85859f;
+    --line: #e4e2f1;
+    --line-2: #edecf6;
+    --track: #ecebf7;
+
+    --accent: #f88f22;
+    --accent-mark: #b7550c;
+    --accent-on: #1a1006;
+    --accent-ink: #a04d0a;
+    --accent-bg: #fdeada;
+    --accent-2: #ea6113;
+
+    --good: #0f9d68;
+    --good-ink: #0a7a51;
+    --good-bg: #dff5ec;
+
+    --warn: #b87200;
+    --warn-ink: #8f5900;
+    --warn-bg: #fdefd8;
+
+    --info: #2f6fe4;
+    --info-ink: #1f56b5;
+    --info-bg: #e6eefc;
+
+    --idle: #7b52c9;
+    --idle-ink: #6440a8;
+    --idle-bg: #efe9fa;
+
+    --grey-bg: #f0eff8;
+
+    /* Same four roles, stepped for the light surface and validated separately. */
+    --chart-good: #0f9d68;
+    --chart-progress: #2f6fe4;
+    --chart-hold: #b87200;
+    --chart-none: #7b52c9;
+
+    --tile-violet: #fff3d9;
+    --tile-violet-edge: #f0d597;
+    --tile-violet-bar: #fbb931;
+    --tile-blue: #e6eefc;
+    --tile-blue-edge: #adc6f2;
+    --tile-blue-bar: #2f6fe4;
+    --tile-rose: #ffe7d5;
+    --tile-rose-edge: #f4bf95;
+    --tile-rose-bar: #ea6113;
+    --tile-mint: #e0f4ec;
+    --tile-mint-edge: #9adcbf;
+    --tile-mint-bar: #0f9d68;
+    --tile-slate: #eeebf6;
+    --tile-slate-edge: #cdc3e4;
+    --tile-slate-bar: #7b52c9;
+    --tile-neutral: #f0f0f3;
+    --tile-neutral-edge: #d3d3da;
+    --tile-neutral-bar: #83838f;
+
+    --ring-glow: 0 0 0 1px color-mix(in oklab, var(--accent) 30%, transparent),
+      0 8px 24px -14px color-mix(in oklab, var(--accent) 60%, transparent);
+  }
+
+  body {
+    @apply bg-plane text-ink antialiased;
+
+    font-family: "DM Sans", ui-sans-serif, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    font-optical-sizing: auto;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-mark);
+    outline-offset: 1px;
+  }
+}
+
+@layer components {
+  /* Stat tile: flat tint, colored edge and a solid cap rule. */
+  .tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklab, var(--tile-edge) 55%, transparent);
+    background: var(--tile-bg);
+  }
+
+  .tile::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 3px;
+    background: var(--tile-bar);
+  }
+
+  .tile-violet {
+    --tile-bg: var(--tile-violet);
+    --tile-edge: var(--tile-violet-edge);
+    --tile-bar: var(--tile-violet-bar);
+  }
+  .tile-blue {
+    --tile-bg: var(--tile-blue);
+    --tile-edge: var(--tile-blue-edge);
+    --tile-bar: var(--tile-blue-bar);
+  }
+  .tile-rose {
+    --tile-bg: var(--tile-rose);
+    --tile-edge: var(--tile-rose-edge);
+    --tile-bar: var(--tile-rose-bar);
+  }
+  .tile-mint {
+    --tile-bg: var(--tile-mint);
+    --tile-edge: var(--tile-mint-edge);
+    --tile-bar: var(--tile-mint-bar);
+  }
+  .tile-slate {
+    --tile-bg: var(--tile-slate);
+    --tile-edge: var(--tile-slate-edge);
+    --tile-bar: var(--tile-slate-bar);
+  }
+  .tile-neutral {
+    --tile-bg: var(--tile-neutral);
+    --tile-edge: var(--tile-neutral-edge);
+    --tile-bar: var(--tile-neutral-bar);
+  }
+
+  .brand-mark {
+    background: var(--accent);
+  }
+
+  .title-pop {
+    color: var(--ink);
+  }
+
+  /* Data marks use the darker step so they hold 3:1 on the light surface. */
+  .bar-fill {
+    background: var(--accent-mark);
+  }
+
+  .bar-fill-good {
+    background: var(--good);
+  }
+}
+
+@layer utilities {
+  .skeleton {
+    background-color: var(--track);
+    border-radius: 0.5rem;
+    animation: skeleton-fade 1.4s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-fade {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  .stage-pulse {
+    animation: stage-pulse 1.6s cubic-bezier(0.3, 0, 0.5, 1) infinite;
+  }
+
+  /* Second ring, half a cycle behind the first, so there is always one in flight. */
+  .stage-pulse-2 {
+    animation: stage-pulse 1.6s cubic-bezier(0.3, 0, 0.5, 1) infinite;
+    animation-delay: 0.8s;
+  }
+
+  .stage-dot {
+    animation: stage-dot 1.6s ease-in-out infinite;
+  }
+
+  @keyframes stage-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.85;
+    }
+    80% {
+      transform: scale(3.4);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(3.4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes stage-dot {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent-mark) 60%, transparent);
+    }
+    50% {
+      transform: scale(1.18);
+      box-shadow: 0 0 0 6px color-mix(in oklab, var(--accent-mark) 0%, transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton,
+    .stage-pulse,
+    .stage-pulse-2,
+    .stage-dot {
+      animation: none;
+    }
+
+    .stage-pulse,
+    .stage-pulse-2 {
+      display: none;
+    }
+  }
+}
+
+@theme inline {
+  --color-plane: var(--plane);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-track: var(--track);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-bg: var(--accent-bg);
+  --color-accent-on: var(--accent-on);
+  --color-accent-mark: var(--accent-mark);
+  --color-accent-2: var(--accent-2);
+  --color-good: var(--good);
+  --color-good-ink: var(--good-ink);
+  --color-good-bg: var(--good-bg);
+  --color-warn: var(--warn);
+  --color-warn-ink: var(--warn-ink);
+  --color-warn-bg: var(--warn-bg);
+  --color-info: var(--info);
+  --color-info-ink: var(--info-ink);
+  --color-info-bg: var(--info-bg);
+  --color-idle: var(--idle);
+  --color-idle-ink: var(--idle-ink);
+  --color-idle-bg: var(--idle-bg);
+  --color-grey-bg: var(--grey-bg);
+  --color-chart-good: var(--chart-good);
+  --color-chart-progress: var(--chart-progress);
+  --color-chart-hold: var(--chart-hold);
+  --color-chart-none: var(--chart-none);
+}
