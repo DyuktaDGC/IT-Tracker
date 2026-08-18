@@ -12,24 +12,13 @@ const blank = (value) => {
 // A row is "future scope" while none of its three gates has been recorded.
 const isFutureScope = (item) => blank(item.dataStatus) && blank(item.buildStatus) && blank(item.finalStatus);
 
-const hasDate = (value) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
+const HEADERS = ["Step No", "Task", "Status", "Start Date", "Delivery Date"];
 
-// Group consecutive rows that share a type, keeping the sheet's order.
-const groupByType = (items) =>
-  items.reduce((groups, item) => {
-    const type = item.type || "Other";
-    const last = groups.at(-1);
-    if (last && last.type === type) last.items.push(item);
-    else groups.push({ type, items: [item] });
-    return groups;
-  }, []);
-
+// Rows stay in sheet order — no grouping, no sorting.
 function ChecklistCard({ title, hint, items, empty }) {
-  const groups = groupByType(items);
-
   return (
     <Card className="p-5">
-      <div className="mb-1 flex items-center gap-2.5">
+      <div className="mb-3 flex items-center gap-2.5">
         <span className="bar-fill h-4 w-1 flex-none rounded-full" aria-hidden="true" />
         <h3 className="text-[15px] font-bold tracking-tight">{title}</h3>
         <span className="bg-accent-bg text-accent-ink rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums">
@@ -40,50 +29,40 @@ function ChecklistCard({ title, hint, items, empty }) {
       {items.length === 0 ? (
         <p className="text-muted py-6 text-center text-[13px] italic">{empty}</p>
       ) : (
-        groups.map((group, groupIndex) => (
-          <div key={`${group.type}-${groupIndex}`}>
-            <div className="text-accent-ink mt-4 mb-1 flex items-baseline gap-2 text-[11.5px] font-bold tracking-widest uppercase">
-              <span className="tabular-nums">{groupIndex + 1}.</span>
-              <span>{group.type}</span>
-              <span className="text-muted tabular-nums">{group.items.length}</span>
-            </div>
-            <ol className="grid">
-              {group.items.map((item, index) => {
-                const dates = [
-                  hasDate(item.startDate) && ["Start", item.startDate],
-                  hasDate(item.deliveryDate) && ["Delivery", item.deliveryDate],
-                ].filter(Boolean);
-
-                return (
-                  <li
-                    key={`${item.item}-${index}`}
-                    className="border-line-2 hover:bg-surface-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t px-2 py-2.5 first:border-t-0"
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-[14px]">
+            <thead>
+              <tr>
+                {HEADERS.map((header) => (
+                  <th
+                    key={header}
+                    scope="col"
+                    className="border-line text-muted border-b px-2 py-2 text-left text-[11px] font-bold tracking-widest whitespace-nowrap uppercase"
                   >
-                    <span className="text-muted w-9 flex-none text-right text-[12.5px] font-semibold tabular-nums">
-                      {groupIndex + 1}.{index + 1}
-                    </span>
-                    <span className="min-w-0 flex-1 text-[14.5px] font-semibold">{item.item}</span>
-                    <span className="flex flex-none flex-wrap items-center gap-1.5">
-                      <StatusPill value={item.dataStatus} />
-                      <StatusPill value={item.buildStatus} />
-                      <StatusPill value={item.finalStatus} />
-                    </span>
-                    {(dates.length > 0 || item.remarks) && (
-                      <span className="text-muted flex w-full flex-wrap gap-x-4 pl-12 text-[12px]">
-                        {dates.map(([label, value]) => (
-                          <span key={label}>
-                            {label}: <DateValue value={value} />
-                          </span>
-                        ))}
-                        {item.remarks && <span className="text-ink-2">{item.remarks}</span>}
-                      </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        ))
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, index) => (
+                <tr key={`${item.item}-${index}`} className="border-line-2 hover:bg-surface-2 border-t">
+                  <td className="text-muted px-2 py-3 text-[13px] font-semibold tabular-nums">{index + 1}</td>
+                  <td className="px-2 py-3 font-semibold">{item.item}</td>
+                  <td className="px-2 py-3">
+                    <StatusPill value={item.finalStatus} />
+                  </td>
+                  <td className="px-2 py-3 whitespace-nowrap">
+                    <DateValue value={item.startDate} />
+                  </td>
+                  <td className="px-2 py-3 whitespace-nowrap">
+                    <DateValue value={item.deliveryDate} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </Card>
   );

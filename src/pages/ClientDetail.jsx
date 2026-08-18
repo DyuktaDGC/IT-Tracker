@@ -48,7 +48,6 @@ export default function ClientDetail() {
   if (!client) return <NotFound />;
 
   const projects = data.projects.filter((project) => project.clientId === clientId);
-  const open = client.statusMix.inProgress + client.statusMix.onHold;
   const items = projects.flatMap((project) => project.items);
   const unrecorded = items.filter((item) => !item.dataStatus && !item.buildStatus && !item.finalStatus).length;
 
@@ -62,7 +61,7 @@ export default function ClientDetail() {
 
       {active && <DashboardSwitcher projects={projects} value={active.id} onChange={setSelected} />}
 
-      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-3">
         <StatCard tone="violet" label="Dashboards" value={client.dashboardCount} />
         <StatCard
           tone={client.completionPct === 100 ? "mint" : "blue"}
@@ -71,7 +70,6 @@ export default function ClientDetail() {
           foot={`${client.itemsDone}/${client.itemsTotal} checklist items`}
         />
         <StatCard tone="mint" label="Delivered" value={client.statusMix.completed} />
-        <StatCard tone={open ? "rose" : "slate"} label="Open" value={open} />
       </div>
 
       {client.completionPct === 0 && (
