@@ -56,7 +56,7 @@ export default function ClientDetail() {
 
   return (
     <>
-      <Breadcrumbs trail={[{ label: "Client", to: "/clients" }, { label: client.name }]} />
+      <Breadcrumbs trail={[{ label: "Overview", to: "/" }, { label: client.name }]} />
       <PageHead tight title={client.name} />
 
       {active && <DashboardSwitcher projects={projects} value={active.id} onChange={setSelected} />}

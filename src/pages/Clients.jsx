@@ -1,3 +1,4 @@
+import Breadcrumbs from "../components/Breadcrumbs.jsx";
 import Row, { RowTitle } from "../components/Row.jsx";
 import ProgressBar from "../components/ProgressBar.jsx";
 import StatCard from "../components/StatCard.jsx";
@@ -15,7 +16,8 @@ export default function Clients() {
   if (clients.length === 0) {
     return (
       <>
-        <PageHead title="Client overview" />
+        <Breadcrumbs trail={[{ label: "Overview", to: "/" }, { label: "All clients" }]} />
+        <PageHead tight title="Client overview" />
         <Empty month={data.month} filtered={filtersActive} />
       </>
     );
@@ -25,7 +27,8 @@ export default function Clients() {
 
   return (
     <>
-      <PageHead title="Client overview" />
+      <Breadcrumbs trail={[{ label: "Overview", to: "/" }, { label: "All clients" }]} />
+      <PageHead tight title="Client overview" />
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:auto-cols-fr lg:grid-flow-col">
         <StatCard tone="violet" label="Total clients" value={kpis.totalClients} />

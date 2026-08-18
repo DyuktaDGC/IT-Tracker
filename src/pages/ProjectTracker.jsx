@@ -15,7 +15,7 @@ export default function ProjectTracker() {
     <>
       <Breadcrumbs
         trail={[
-          { label: "Client", to: "/clients" },
+          { label: "Overview", to: "/" },
           { label: project.client, to: `/clients/${clientId}` },
           { label: project.dashboard },
         ]}

@@ -12,8 +12,9 @@ import { useTracker } from "../hooks/useTracker.js";
 const PERSON_TONES = ["mint", "slate", "violet", "blue", "rose"];
 
 // Average performance per client = checklist items done / total across every
-// dashboard that employee owns for the client. Falls back to the mean of the
-// dashboard percentages when a client has no checklist items recorded yet.
+// dashboard that employee owns for the client. A client with no checklist rows
+// yet is flagged rather than shown as 0%, so "no data" doesn't read as "no
+// progress". Sorted worst-first: whatever is stalling sits at the top.
 function clientsOf(employee, projects) {
   const byClient = new Map();
 
@@ -37,14 +38,11 @@ function clientsOf(employee, projects) {
   return [...byClient.values()]
     .map((entry) => ({
       ...entry,
-      avgPct:
-        entry.itemsTotal > 0
-          ? (entry.itemsDone / entry.itemsTotal) * 100
-          : entry.dashboardCount > 0
-            ? entry.pctSum / entry.dashboardCount
-            : 0,
+      tracked: entry.itemsTotal > 0,
+      avgPct: entry.itemsTotal > 0 ? (entry.itemsDone / entry.itemsTotal) * 100 : 0,
     }))
-    .sort((a, b) => b.avgPct - a.avgPct || a.name.localeCompare(b.name));
+    // Untracked clients last — they are a data gap, not a performance problem.
+    .sort((a, b) => Number(a.tracked) - Number(b.tracked) || a.avgPct - b.avgPct || a.name.localeCompare(b.name));
 }
 
 export default function Employee() {
@@ -139,22 +137,29 @@ export default function Employee() {
                                 {client.name}
                               </span>
                               <span className="text-muted block truncate text-[13px]">
-                                {plural(client.dashboardCount, "dashboard")} · {client.itemsDone}/
-                                {client.itemsTotal} items
+                                {plural(client.dashboardCount, "dashboard")}
+                                {client.tracked && ` · ${client.itemsDone}/${client.itemsTotal} items`}
                               </span>
                             </span>
-                            <span className="block">
-                              <span className="mb-1 flex items-baseline justify-between gap-2">
-                                <span className="text-[15px] font-semibold tracking-tight tabular-nums">
-                                  {formatPercent(client.avgPct)}
+                            {client.tracked ? (
+                              <span className="block">
+                                <span className="mb-1 flex items-baseline justify-between gap-2">
+                                  <span className="text-[15px] font-semibold tracking-tight tabular-nums">
+                                    {formatPercent(client.avgPct)}
+                                  </span>
+                                  <span className="text-muted text-[12.5px]">avg performance</span>
                                 </span>
-                                <span className="text-muted text-[12.5px]">avg performance</span>
+                                <ProgressBar
+                                  value={client.avgPct}
+                                  label={`${employee.name} average performance for ${client.name}`}
+                                />
                               </span>
-                              <ProgressBar
-                                value={client.avgPct}
-                                label={`${employee.name} average performance for ${client.name}`}
-                              />
-                            </span>
+                            ) : (
+                              <span className="bg-surface-2 text-muted inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-semibold">
+                                <span className="bg-idle inline-block size-1.5 rounded-full" aria-hidden="true" />
+                                No checklist yet
+                              </span>
+                            )}
                           </Link>
                         </li>
                       ))}
