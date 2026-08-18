@@ -13,7 +13,7 @@ function DashboardSwitcher({ projects, value, onChange }) {
     <div
       role="tablist"
       aria-label="Dashboard"
-      className="border-line bg-surface-2 mt-4 flex flex-wrap gap-1 rounded-2xl border p-1"
+      className="border-line bg-surface-2 mt-5 inline-flex w-fit max-w-full flex-wrap gap-1 rounded-2xl border p-1"
     >
       {projects.map((project) => {
         const active = project.id === value;
@@ -60,7 +60,9 @@ export default function ClientDetail() {
       <Breadcrumbs trail={[{ label: "Client", to: "/clients" }, { label: client.name }]} />
       <PageHead tight title={client.name} />
 
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {active && <DashboardSwitcher projects={projects} value={active.id} onChange={setSelected} />}
+
+      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard tone="violet" label="Dashboards" value={client.dashboardCount} />
         <StatCard
           tone={client.completionPct === 100 ? "mint" : "blue"}
@@ -79,12 +81,7 @@ export default function ClientDetail() {
         </Note>
       )}
 
-      {active && (
-        <>
-          <DashboardSwitcher projects={projects} value={active.id} onChange={setSelected} />
-          <ProjectDetail key={active.id} project={active} />
-        </>
-      )}
+      {active && <ProjectDetail key={active.id} project={active} />}
     </>
   );
 }
