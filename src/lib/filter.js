@@ -8,6 +8,14 @@ const MIX_BUCKET = {
 
 const emptyMix = () => ({ completed: 0, inProgress: 0, onHold: 0, notStarted: 0 });
 
+// Dashboards nobody owns yet. The sheet writes this a dozen different ways, and
+// none of them is a person — so an unowned dashboard never becomes an employee.
+const NOBODY = new Set(["", "unassigned", "not assigned", "none", "na", "n/a", "nil", "tbd", "-", "_"]);
+
+export const UNASSIGNED = "Unassigned";
+
+export const isUnassigned = (name) => NOBODY.has((name ?? "").trim().toLowerCase());
+
 const bucketOf = (status) => MIX_BUCKET[(status ?? "").trim().toLowerCase()] ?? "notStarted";
 
 const pct = (done, total) => (total > 0 ? Math.round((100 * done) / total) : 0);
@@ -58,8 +66,12 @@ const matchesQuery = (project, query) => {
 export const hasActiveFilter = (filters) =>
   FILTER_KEYS.some((key) => Boolean(typeof filters?.[key] === "string" ? filters[key].trim() : filters?.[key]));
 
+// Unassigned stays selectable — it is a useful slice of the work — but sorts
+// last so it never sits among the people.
 export const employeeOptions = (data) =>
-  [...new Set((data?.projects ?? []).map((project) => project.employee).filter(Boolean))].sort();
+  [...new Set((data?.projects ?? []).map((project) => project.employee).filter(Boolean))].sort(
+    (a, b) => Number(isUnassigned(a)) - Number(isUnassigned(b)) || a.localeCompare(b),
+  );
 
 export const businessOptions = (data) =>
   [...new Map((data?.clients ?? []).map((client) => [client.id, client.name])).entries()]
@@ -94,7 +106,8 @@ export function filterTracker(data, filters) {
     };
   });
 
-  const employees = [...groupBy(projects, (project) => project.employee)].map(([name, group]) => {
+  const owned = projects.filter((project) => !isUnassigned(project.employee));
+  const employees = [...groupBy(owned, (project) => project.employee)].map(([name, group]) => {
     const { itemsDone, itemsTotal, statusMix } = rollUp(group);
     return {
       name,
