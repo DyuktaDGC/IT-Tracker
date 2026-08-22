@@ -15,7 +15,18 @@ const KNOWN = {
 
 const BLANK = { label: "Not recorded", tone: "grey" };
 
-export const STAGES = ["Client Contact", "Development", "Client Review", "Maintenance"];
+// The Stage dropdown in the project sheet, in the order work moves through it.
+// Must stay in sync with the STAGE map in the n8n "Build Tracker Payload" node.
+export const STAGES = [
+  "Client Contact",
+  "Data Collection",
+  "Data Review",
+  "Dashboard Checklist",
+  "Development",
+  "Client Review",
+  "Finalised",
+  "Maintenance",
+];
 
 export const MIX_KEYS = [
   ["completed", "Completed", "good"],
