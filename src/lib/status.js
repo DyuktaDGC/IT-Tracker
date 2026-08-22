@@ -1,7 +1,9 @@
 const KNOWN = {
   completed: { label: "Completed", tone: "good" },
   approved: { label: "Approved", tone: "good" },
-  "data approved": { label: "Data Approved", tone: "accent" },
+  // Counts as a cleared step (the data came in and was signed off), so it reads
+  // green like the other finished states.
+  "data approved": { label: "Data Approved", tone: "good" },
   "data pending": { label: "Data Pending", tone: "warn" },
   "data needs correction": { label: "Data Needs Correction", tone: "warn" },
   "in progress": { label: "In Progress", tone: "accent" },

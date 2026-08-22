@@ -206,16 +206,18 @@ export default function Employee() {
                               </span>
                               {client.tracked ? (
                                 <span className="block">
-                                  <span className="mb-1 flex items-baseline justify-between gap-2">
-                                    <span className="text-[15px] font-semibold tracking-tight tabular-nums">
+                                  <span className="text-muted mb-1.5 block text-[12.5px]">avg performance</span>
+                                  <span className="flex items-center gap-2.5">
+                                    <span className="min-w-0 flex-1">
+                                      <ProgressBar
+                                        value={client.avgPct}
+                                        label={`${employee.name} average performance for ${client.name}`}
+                                      />
+                                    </span>
+                                    <span className="w-11 flex-none text-right text-[15px] font-semibold tracking-tight tabular-nums">
                                       {formatPercent(client.avgPct)}
                                     </span>
-                                    <span className="text-muted text-[12.5px]">avg performance</span>
                                   </span>
-                                  <ProgressBar
-                                    value={client.avgPct}
-                                    label={`${employee.name} average performance for ${client.name}`}
-                                  />
                                 </span>
                               ) : (
                                 <NoChecklist />
