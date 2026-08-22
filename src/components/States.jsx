@@ -10,44 +10,94 @@ const Shell = ({ tone = "grey", title, children }) => (
   </Card>
 );
 
+// Mirrors the Employee page — stat tiles, the unassigned row list, then the
+// person cards — so the real content lands in the same places the placeholders
+// held instead of shuffling the page.
+const SectionHead = () => (
+  <div className="mt-8 mb-3.5 flex items-center gap-2.5">
+    <span className="bar-fill h-4 w-1 flex-none rounded-full opacity-40" aria-hidden="true" />
+    <Bar className="h-3.5 w-36" />
+    <Bar className="h-4 w-12 rounded-full" />
+  </div>
+);
+
+const RowSkeleton = () => (
+  <div className="border-line-2 grid items-center gap-3 border-t px-5 py-4 first:border-t-0 sm:gap-5 lg:grid-cols-[minmax(0,1.4fr)_auto_minmax(220px,1fr)]">
+    <div>
+      <Bar className="h-3.5 w-44" />
+      <Bar className="mt-2 h-2.5 w-28" />
+    </div>
+    <Bar className="hidden h-5 w-24 rounded-full lg:block" />
+    <div className="hidden lg:block">
+      <Bar className="h-2.5 w-full" />
+    </div>
+  </div>
+);
+
+const PersonSkeleton = () => (
+  <Card className="p-5">
+    <div className="mb-4 flex items-center gap-3.5">
+      <Bar className="size-10 flex-none rounded-xl" />
+      <div className="mr-auto">
+        <Bar className="h-4 w-28" />
+        <Bar className="mt-2 h-2.5 w-40" />
+      </div>
+      <Bar className="size-20 flex-none rounded-full" />
+    </div>
+
+    <div className="mt-4">
+      <Bar className="h-2.5 w-28" />
+      <Bar className="mt-2.5 h-2.5 w-full" />
+    </div>
+
+    <div className="border-line-2 mt-5 border-t pt-4">
+      <Bar className="h-2.5 w-28" />
+      {[0, 1, 2].map((index) => (
+        <div key={index} className="mt-3 grid gap-2 px-2 sm:grid-cols-[minmax(0,1fr)_minmax(140px,1fr)] sm:items-center">
+          <div>
+            <Bar className="h-3.5 w-36" />
+            <Bar className="mt-2 h-2.5 w-24" />
+          </div>
+          <div>
+            <Bar className="h-2.5 w-24" />
+            <Bar className="mt-2.5 h-2 w-full" />
+          </div>
+        </div>
+      ))}
+    </div>
+  </Card>
+);
+
 export const Loading = () => (
   <div role="status" aria-live="polite" aria-busy="true">
     <span className="sr-only">Loading the tracker</span>
 
-    <div className="pt-7 pb-2">
-      <Bar className="h-7 w-56" />
-      <Bar className="mt-3 h-3 w-72" />
+    {/* h-11 matches the rendered height of the PageHead title. */}
+    <div className="pt-7 pb-1">
+      <Bar className="h-11 w-64" />
     </div>
 
-    <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
+    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:auto-cols-fr lg:grid-flow-col">
       {[0, 1, 2, 3, 4].map((index) => (
-        <div key={index} className="bg-tile-slate rounded-2xl p-4">
-          <Bar className="h-2.5 w-20" />
+        <div key={index} className="tile tile-slate p-4">
+          <Bar className="h-2.5 w-24" />
           <Bar className="mt-4 h-7 w-14" />
-          <Bar className="mt-3 h-2.5 w-16" />
+          <Bar className="mt-3 h-2.5 w-20" />
         </div>
       ))}
     </div>
 
-    <div className="border-line bg-surface mt-8 overflow-hidden rounded-2xl border">
-      {[0, 1, 2, 3, 4].map((index) => (
-        <div
-          key={index}
-          className="border-line-2 grid gap-4 border-t px-5 py-4 first:border-t-0 lg:grid-cols-[minmax(0,1.5fr)_200px_minmax(0,1.2fr)]"
-        >
-          <div>
-            <Bar className="h-3.5 w-48" />
-            <Bar className="mt-2 h-2.5 w-32" />
-          </div>
-          <div className="hidden lg:block">
-            <Bar className="h-3 w-16" />
-            <Bar className="mt-2.5 h-2 w-full" />
-          </div>
-          <div className="hidden lg:block">
-            <Bar className="h-2.5 w-full" />
-          </div>
-        </div>
+    <SectionHead />
+    <Card>
+      {[0, 1, 2].map((index) => (
+        <RowSkeleton key={index} />
       ))}
+    </Card>
+
+    <SectionHead />
+    <div className="grid gap-3 lg:grid-cols-2">
+      <PersonSkeleton />
+      <PersonSkeleton />
     </div>
   </div>
 );
