@@ -102,6 +102,42 @@ export default function Employee() {
         ))}
       </div>
 
+      {unassigned.length > 0 && (
+        <Section title="Unassigned dashboards" hint={unassigned.length}>
+          <Card>
+            {unassigned.map((project) => (
+              <Row
+                key={project.id}
+                to={`/clients/${project.clientId}/${project.id}`}
+                className="sm:grid-cols-[minmax(0,1.4fr)_auto] lg:grid-cols-[minmax(0,1.4fr)_auto_minmax(220px,1fr)]"
+              >
+                <RowTitle title={project.client} meta={project.dashboard} />
+                <div className="justify-self-start sm:justify-self-end lg:justify-self-center">
+                  <StatusPill value={project.status} />
+                </div>
+                <div className="sm:col-span-2 lg:col-span-1">
+                  {project.itemsTotal > 0 ? (
+                    <>
+                      <div className="mb-1.5 flex items-baseline justify-between gap-2">
+                        <span className="text-[15px] font-semibold tracking-tight tabular-nums">
+                          {formatPercent(project.completionPct)}
+                        </span>
+                        <span className="text-muted text-xs tabular-nums">
+                          {project.itemsDone}/{project.itemsTotal} checklist items
+                        </span>
+                      </div>
+                      <ProgressBar value={project.completionPct} label={`${project.dashboard} completion`} />
+                    </>
+                  ) : (
+                    <NoChecklist />
+                  )}
+                </div>
+              </Row>
+            ))}
+          </Card>
+        </Section>
+      )}
+
       {people.length > 0 && (
         <Section title="Employee" hint={plural(people.length, "person", "people")}>
           <div className="grid gap-3 lg:grid-cols-2">
@@ -194,42 +230,6 @@ export default function Employee() {
               );
             })}
           </div>
-        </Section>
-      )}
-
-      {unassigned.length > 0 && (
-        <Section title="Unassigned dashboards" hint={unassigned.length}>
-          <Card>
-            {unassigned.map((project) => (
-              <Row
-                key={project.id}
-                to={`/clients/${project.clientId}/${project.id}`}
-                className="sm:grid-cols-[minmax(0,1.4fr)_auto] lg:grid-cols-[minmax(0,1.4fr)_auto_minmax(220px,1fr)]"
-              >
-                <RowTitle title={project.client} meta={project.dashboard} />
-                <div className="justify-self-start sm:justify-self-end lg:justify-self-center">
-                  <StatusPill value={project.status} />
-                </div>
-                <div className="sm:col-span-2 lg:col-span-1">
-                  {project.itemsTotal > 0 ? (
-                    <>
-                      <div className="mb-1.5 flex items-baseline justify-between gap-2">
-                        <span className="text-[15px] font-semibold tracking-tight tabular-nums">
-                          {formatPercent(project.completionPct)}
-                        </span>
-                        <span className="text-muted text-xs tabular-nums">
-                          {project.itemsDone}/{project.itemsTotal} checklist items
-                        </span>
-                      </div>
-                      <ProgressBar value={project.completionPct} label={`${project.dashboard} completion`} />
-                    </>
-                  ) : (
-                    <NoChecklist />
-                  )}
-                </div>
-              </Row>
-            ))}
-          </Card>
         </Section>
       )}
     </>
