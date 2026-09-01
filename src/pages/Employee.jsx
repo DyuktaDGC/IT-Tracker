@@ -97,7 +97,6 @@ export default function Employee() {
             tone={PERSON_TONES[index % PERSON_TONES.length]}
             label={`${employee.name} clients`}
             value={employee.clientCount}
-            foot={`${formatPercent(employee.completionPct)} avg performance`}
           />
         ))}
       </div>
