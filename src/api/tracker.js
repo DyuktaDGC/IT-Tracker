@@ -1,13 +1,16 @@
 import { z } from "zod";
 import { request } from "./client.js";
 
-const status = z.string().nullable();
+// The sheet is hand-typed, so a single junk cell must never blank the whole
+// dashboard: every leaf falls back instead of failing the parse.
+const status = z.string().nullable().catch(null);
 const isoDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, "expected YYYY-MM-DD")
-  .nullable();
-const count = z.number().int().nonnegative();
-const percent = z.number().min(0).max(100);
+  .nullable()
+  .catch(null);
+const count = z.number().int().nonnegative().catch(0);
+const percent = z.number().min(0).max(100).catch(0);
 
 const mix = z.object({ completed: count, inProgress: count, onHold: count, notStarted: count });
 
