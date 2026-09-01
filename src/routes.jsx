@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import App from "./App.jsx";
 import Employee from "./pages/Employee.jsx";
 import Clients from "./pages/Clients.jsx";
@@ -6,7 +6,7 @@ import ClientDetail from "./pages/ClientDetail.jsx";
 import ProjectTracker from "./pages/ProjectTracker.jsx";
 import { NotFound, RouteError } from "./components/States.jsx";
 
-export default createBrowserRouter([
+export default createHashRouter([
   {
     path: "/",
     element: <App />,
