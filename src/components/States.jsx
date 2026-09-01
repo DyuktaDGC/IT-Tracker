@@ -79,10 +79,9 @@ export const Loading = () => (
 
     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:auto-cols-fr lg:grid-flow-col">
       {[0, 1, 2, 3, 4].map((index) => (
-        <div key={index} className="tile tile-slate p-4">
+        <div key={index} className="tile tile-slate px-5 py-6">
           <Bar className="h-2.5 w-24" />
-          <Bar className="mt-4 h-7 w-14" />
-          <Bar className="mt-3 h-2.5 w-20" />
+          <Bar className="mt-4 h-8 w-14" />
         </div>
       ))}
     </div>
